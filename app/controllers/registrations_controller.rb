@@ -6,6 +6,10 @@ class RegistrationsController < ApplicationController
     def create
       @user = User.new(user_params)
       if @user.save
+        # Send email
+        # TERMINAL: rails g mailer Register welcome
+        RegisterMailer.with(user: @user).welcome.deliver_now
+
         session[:user_id] = @user.id
         redirect_to root_path, notice: "Successfully created account"
       else
